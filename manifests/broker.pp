@@ -37,6 +37,9 @@
 # [*service_restart*]
 # Boolean, if the configuration files should trigger a service restart
 #
+# [*service_requires*]
+# Set the list of services required to be running before Kafka.
+#
 # === Examples
 #
 # Create a single broker instance which talks to a local zookeeper instance.
@@ -46,21 +49,22 @@
 # }
 #
 class kafka::broker (
-  $version         = $kafka::params::version,
-  $scala_version   = $kafka::params::scala_version,
-  $install_dir     = $kafka::params::install_dir,
-  $mirror_url      = $kafka::params::mirror_url,
-  $config          = {},
-  $config_defaults = $kafka::params::broker_config_defaults,
-  $install_java    = $kafka::params::install_java,
-  $package_dir     = $kafka::params::package_dir,
-  $service_install = $kafka::params::broker_service_install,
-  $service_ensure  = $kafka::params::broker_service_ensure,
-  $service_restart = $kafka::params::service_restart,
-  $jmx_opts        = $kafka::params::broker_jmx_opts,
-  $heap_opts       = $kafka::params::broker_heap_opts,
-  $log4j_opts      = $kafka::params::broker_log4j_opts,
-  $opts            = $kafka::params::broker_opts,
+  $version          = $kafka::params::version,
+  $scala_version    = $kafka::params::scala_version,
+  $install_dir      = $kafka::params::install_dir,
+  $mirror_url       = $kafka::params::mirror_url,
+  $config           = {},
+  $config_defaults  = $kafka::params::broker_config_defaults,
+  $install_java     = $kafka::params::install_java,
+  $package_dir      = $kafka::params::package_dir,
+  $service_install  = $kafka::params::broker_service_install,
+  $service_ensure   = $kafka::params::broker_service_ensure,
+  $service_restart  = $kafka::params::service_restart,
+  $jmx_opts         = $kafka::params::broker_jmx_opts,
+  $heap_opts        = $kafka::params::broker_heap_opts,
+  $log4j_opts       = $kafka::params::broker_log4j_opts,
+  $opts             = $kafka::params::broker_opts,
+  $service_requires = $kafka::params::service_requires,
 ) inherits kafka::params {
 
   validate_re($::osfamily, 'RedHat|Debian\b', "${::operatingsystem} not supported")

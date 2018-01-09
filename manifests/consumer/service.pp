@@ -9,7 +9,8 @@
 #
 class kafka::consumer::service(
   $service_config   = $kafka::consumer::service_config,
-  $service_defaults = $kafka::consumer::service_defaults
+  $service_defaults = $kafka::consumer::service_defaults,
+  $service_requires = $kafka::consumer::service_requires,
 ) {
 
   if $caller_module_name != $module_name {
