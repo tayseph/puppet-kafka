@@ -1,9 +1,10 @@
 [Unit]
 Description=Apache Kafka server (<%= (@service_name.split(/-/)[1] and @service_name.split(/-/)[1].capitalize) or 'broker' -%>)
 Documentation=http://kafka.apache.org/documentation.html
-Wants=zookeeper.service
-After=zookeeper.service
-Requires=zookeeper.service
+<% if !@service_requires.empty? -%>
+After=<%= @service_requires.join(' ') %>
+Wants=<%= @service_requires.join(' ') %>
+<%- end -%>
 
 [Service]
 Type=simple

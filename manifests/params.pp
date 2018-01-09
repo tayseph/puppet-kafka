@@ -39,6 +39,7 @@ class kafka::params {
   $consumer_log4j_opts = $broker_log4j_opts
 
   $service_restart = true
+  $service_requires = []
 
   #http://kafka.apache.org/documentation.html#brokerconfigs
   $broker_config_defaults = {

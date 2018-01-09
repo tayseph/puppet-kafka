@@ -11,6 +11,7 @@ class kafka::producer::service(
   $input            = $kafka::producer::input,
   $service_config   = $kafka::producer::service_config,
   $service_defaults = $kafka::producer::service_defaults,
+  $service_requires = $kafka::producer::service_requires,
 ) {
 
   if $caller_module_name != $module_name {

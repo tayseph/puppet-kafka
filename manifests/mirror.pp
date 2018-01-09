@@ -52,6 +52,9 @@
 # [*service_restart*]
 # Boolean, if the configuration files should trigger a service restart
 #
+# [*service_requires*]
+# Set the list of services required to be running before Kafka.
+#
 # === Examples
 #
 # Create the mirror service connecting to a local zookeeper
@@ -79,7 +82,8 @@ class kafka::mirror (
   $package_dir              = $kafka::params::package_dir,
   $service_restart          = $kafka::params::service_restart,
   $mirror_jmx_opts          = $kafka::params::mirror_jmx_opts,
-  $mirror_log4j_opts        = $kafka::params::mirror_log4j_opts
+  $mirror_log4j_opts        = $kafka::params::mirror_log4j_opts,
+  $service_requires         = $kafka::params::service_requires,
 ) inherits kafka::params {
 
   validate_re($::osfamily, 'RedHat|Debian\b', "${::operatingsystem} not supported")
