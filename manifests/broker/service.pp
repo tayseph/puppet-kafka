@@ -24,31 +24,57 @@ class kafka::broker::service(
   $service_name = 'kafka'
 
   if $service_install {
-    if $::service_provider == 'systemd' {
-      include ::systemd
+    case $::service_provider {
+      'systemd': {
+        include ::systemd
 
-      file { "${service_name}.service":
-        ensure  => file,
-        path    => "/etc/systemd/system/${service_name}.service",
-        mode    => '0644',
-        content => template('kafka/unit.erb'),
+        file { "${service_name}.service":
+          ensure  => file,
+          path    => "/etc/systemd/system/${service_name}.service",
+          mode    => '0644',
+          content => template('kafka/unit.erb'),
+        }
+
+        file { "/etc/init.d/${service_name}":
+          ensure => absent,
+        }
+
+        File["${service_name}.service"] ~>
+        Exec['systemctl-daemon-reload'] ->
+        Service[$service_name]
       }
 
-      file { "/etc/init.d/${service_name}":
-        ensure => absent,
+      'upstart': {
+        file { "/etc/init.d/${service_name}":
+          ensure => absent,
+        } ~>
+
+        exec { 'purge_rcd':
+          command     => '/usr/sbin/update-rc.d kafka remove',
+          refreshonly => true
+        } ->
+
+        file { "${service_name}.service":
+          ensure  => file,
+          path    => "/etc/init/${service_name}.conf",
+          mode    => '0755',
+          content => template('kafka/upstart.erb')
+        } ~>
+        exec { "${service_name} Reload Upstart":
+          command     => "/sbin/initctl reload-configuration",
+          refreshonly => true,
+          before      => Service[$service_name]
+        }
       }
 
-      File["${service_name}.service"] ~>
-      Exec['systemctl-daemon-reload'] ->
-      Service[$service_name]
-
-    } else {
-      file { "${service_name}.service":
-        ensure  => file,
-        path    => "/etc/init.d/${service_name}",
-        mode    => '0755',
-        content => template('kafka/init.erb'),
-        before  => Service[$service_name],
+      default: {
+        file { "${service_name}.service":
+          ensure  => file,
+          path    => "/etc/init.d/${service_name}",
+          mode    => '0755',
+          content => template('kafka/init.erb'),
+          before  => Service[$service_name],
+        }
       }
     }
 
