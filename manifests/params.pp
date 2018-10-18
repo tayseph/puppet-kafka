@@ -283,7 +283,6 @@ class kafka::params {
     'ssl.protocol'                             => 'TLS',
     'ssl.provider'                             => '',
     'ssl.truststore.type'                      => 'JKS',
-    'block.on.buffer.full'                     => false,
     'max.in.flight.requests.per.connection'    => '5',
     'metadata.max.age.ms'                      => '300000',
     'metric.reporters'                         => '',
