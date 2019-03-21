@@ -39,6 +39,7 @@ class kafka::mirror::service(
       path    => "/etc/systemd/system/${service_name}.service",
       mode    => '0644',
       content => template('kafka/unit.erb'),
+      notify  => Service[$service_name],
     }
 
     file { "/etc/init.d/${service_name}":
