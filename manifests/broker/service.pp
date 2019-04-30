@@ -64,9 +64,9 @@ class kafka::broker::service(
       }
       'upstart': {
         file { "/etc/init.d/${service_name}":
-	        ensure => absent,
-	      } ~>
-	
+          ensure => absent,
+        } ~>
+
         exec { 'purge_rcd':
           command     => '/usr/sbin/update-rc.d kafka remove',
           refreshonly => true
