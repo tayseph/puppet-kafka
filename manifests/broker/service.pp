@@ -64,28 +64,27 @@ class kafka::broker::service(
       }
       'upstart': {
         file { "/etc/init.d/${service_name}":
-	          ensure => absent,
-	        } ~>
+	        ensure => absent,
+	      } ~>
 	
-	        exec { 'purge_rcd':
-	          command     => '/usr/sbin/update-rc.d kafka remove',
-	          refreshonly => true
-	        } ->
-	
-	        file { "${service_name}.service":
-	          ensure  => file,
-	          path    => "/etc/init/${service_name}.conf",
-	          mode    => '0755',
-	          content => template('kafka/upstart.erb')
-	        } ~>
-	        exec { "${service_name} Reload Upstart":
-	          command     => "/sbin/initctl reload-configuration",
-	          refreshonly => true,
-	          before      => Service[$service_name]
-	        }
+        exec { 'purge_rcd':
+          command     => '/usr/sbin/update-rc.d kafka remove',
+          refreshonly => true
+        } ->
+
+        file { "${service_name}.service":
+          ensure  => file,
+          path    => "/etc/init/${service_name}.conf",
+          mode    => '0755',
+          content => template('kafka/upstart.erb')
+        } ~>
+        exec { "${service_name} Reload Upstart":
+          command     => "/sbin/initctl reload-configuration",
+          refreshonly => true,
+          before      => Service[$service_name]
+        }
       }
       default: {
-	
         file { "/etc/init.d/${service_name}":
           ensure  => file,
           mode    => '0755',
